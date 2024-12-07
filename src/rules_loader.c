@@ -484,7 +484,7 @@ int perm_to_num(const char *perm)
 struct key_info {
 	u64 hash;
 	char key[KEY_LENGTH_MAX];
-	char nonce[KEY_LENGTH_MAX];
+	char nonce[NONCE_LENGTH_MAX];
 };
 
 int cmp_key_info(const void *a, const void *b)
@@ -536,7 +536,7 @@ int load_keys(struct key_info *key_info_arr, const char *file_path)
 	while (1) {
 		char filepath[4100];
 		char key[KEY_LENGTH_MAX];
-		char nonce[KEY_LENGTH_MAX];
+		char nonce[NONCE_LENGTH_MAX];
 		if (!read_buf(fd, filepath, 4096))
 			break;
 
@@ -548,7 +548,7 @@ int load_keys(struct key_info *key_info_arr, const char *file_path)
 
 		key_info_arr[cnt].hash = fnv1a((u8 *)filepath, strlen(filepath));
 		memcpy(key_info_arr[cnt].key, key, KEY_LENGTH_MAX);
-		memcpy(key_info_arr[cnt].nonce, strdup(nonce), KEY_LENGTH_MAX);
+		memcpy(key_info_arr[cnt].nonce, strdup(nonce), NONCE_LENGTH_MAX);
 		++cnt;
 	}
 
@@ -725,7 +725,7 @@ int load_rules_to_bpf_map(struct main_bpf *skel, const char *file_path)
 			write_key(new_key, key_file, f->path, 32, 12);
 		} else {
 			memcpy(new_key->key, key_info_arr[search].key, KEY_LENGTH_MAX);
-			memcpy(new_key->nonce, key_info_arr[search].nonce, KEY_LENGTH_MAX);
+			memcpy(new_key->nonce, key_info_arr[search].nonce, NONCE_LENGTH_MAX);
 		}
 		bpf_map__update_elem(skel->maps.map_path_rules, &path_hash, sizeof(path_hash),
 				     &proc, sizeof(proc), BPF_ANY);

@@ -1,12 +1,25 @@
 rules:
   - /tmp/bocchi:
-      - cat:
+      - /usr/bin/cat:
           user: paml
           log:
             - open
             - read
             - write
-      - cp:
+      - /usr/bin/cp:
           user: paml
-      - xxd:
+      - /usr/bin/xxd:
+          user: paml
+      - /usr/bin/nvim:
+          user: paml
+  - /tmp/hosts:
+      - /usr/bin/cat:
+          user: paml
+          log:
+            - open
+            - read
+            - write
+      - /usr/bin/cp:
+          user: paml
+      - /usr/bin/xxd:
           user: paml
